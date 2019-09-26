@@ -1,6 +1,5 @@
-import * as Koa from 'koa';
-
 declare module 'thinkjs' {
+  import * as Koa from 'koa';
   interface BaseContext extends Koa.Context {
     readonly userAgent: string
     readonly isGet: boolean
@@ -87,6 +86,7 @@ declare module 'thinkjs' {
   }
 
   interface Think {
+    lushijie: string
     app: ThinkApp
     ROOT_PATH: string
     APP_PATH: string
@@ -102,12 +102,15 @@ declare module 'thinkjs' {
     Logic: ThinkLogic
     Service: ThinkService
   }
+
+  class Application {
+    constructor(options: Object);
+    run(): void;
+  }
+
   const think: Think
+
+  // export = Application;
 }
 
-declare class Application {
-  constructor(options: Object);
-  run(): void;
-}
 
-export = Application;
