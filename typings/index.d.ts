@@ -1,6 +1,13 @@
 declare module 'thinkjs' {
   import * as Koa from 'koa';
+
+  interface ThinkReqeust extends Koa.Request{}
+  interface ThinkResponse extends Koa.Response {}
+
   interface BaseContext extends Koa.Context {
+    request: ThinkReqeust
+    response: ThinkResponse
+
     readonly userAgent: string
     readonly isGet: boolean
     readonly isPost: boolean
