@@ -48,7 +48,6 @@ declare global {
   }
   interface ThinkController extends ThinkBaseContext {
     new(ctx: ThinkContext): ThinkController
-
     ctx: ThinkContext;
     body: any
     status: number
@@ -66,14 +65,14 @@ declare global {
     action(controller: string|Object, name: string, m?: string): any
   }
   interface ThinkLogic extends ThinkController {
-    new(ctx: ThinkContext): ThinkLogic
+    new(ctx: ThinkContext): ThinkController
     allowMethods: string
     rules: Object
     validateErrors?: Object
     validate(rules: Object, msgs?: Object): Object
   }
   interface ThinkService {
-    new(): ThinkService
+    new(...arg: any[]): ThinkService
   }
   interface ThinkApplication extends Koa {
     modules: string[]
@@ -85,6 +84,7 @@ declare global {
     validators: any
     server: any
   }
+
   interface Think {
     app: ThinkApplication
     ROOT_PATH: string
