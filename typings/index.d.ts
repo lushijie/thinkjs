@@ -1,47 +1,52 @@
-declare module 'thinkjs' {
-  import * as Koa from 'koa';
+import * as Koa from 'koa';
 
+declare interface ThinkBaseContext extends Koa.Context {
+  request: ThinkReqeust
+  response: ThinkResponse
+
+  readonly userAgent: string
+  readonly isGet: boolean
+  readonly isPost: boolean
+  readonly isCli: boolean
+
+  referer(onlyHost: boolean): string
+  referrer(onlyHost: boolean): string
+  isMethod(method: string): boolean
+  isAjax(method: string): boolean
+  isJsonp(callbackField: string): boolean
+  jsonp(data: any, callbackField: string): false
+  json(data: any): false
+  success(data: any, message: string): false
+  fail(errno: number, errmsg: string, data: any): false
+  expires(time: number): undefined
+  config(name: string, value?: any, m?: string): any
+  post(name?: any, value?: any): any
+  file(name?: any, value?: any): any
+  cookie(name: string): string;
+  cookie(name: string, value: null, options?: object): void;
+  cookie(name: string, value: string, options?: object): void;
+  service(name: string, m?: string, ...args: string[]): any
+  download(filepath: string, filename?: string): false
+}
+declare interface ThinkLogger {
+  debug(message: any): void
+  info(message: any): void
+  warn(message: any): void
+  error(message: any): void
+  trace(message: any): void
+}
+
+declare global {
   interface ThinkReqeust extends Koa.Request{}
   interface ThinkResponse extends Koa.Response {}
-
-  interface BaseContext extends Koa.Context {
-    request: ThinkReqeust
-    response: ThinkResponse
-
-    readonly userAgent: string
-    readonly isGet: boolean
-    readonly isPost: boolean
-    readonly isCli: boolean
-
-    referer(onlyHost: boolean): string
-    referrer(onlyHost: boolean): string
-    isMethod(method: string): boolean
-    isAjax(method: string): boolean
-    isJsonp(callbackField: string): boolean
-    jsonp(data: any, callbackField: string): false
-    json(data: any): false
-    success(data: any, message: string): false
-    fail(errno: number, errmsg: string, data: any): false
-    expires(time: number): undefined
-    config(name: string, value?: any, m?: string): any
-    post(name?: any, value?: any): any
-    file(name?: any, value?: any): any
-    cookie(name: string): string;
-    cookie(name: string, value: null, options?: object): void;
-    cookie(name: string, value: string, options?: object): void;
-    service(name: string, m?: string, ...args: string[]): any
-    download(filepath: string, filename?: string): false
-  }
-
-  interface ThinkContext extends BaseContext {
+  interface ThinkContext extends ThinkBaseContext {
     new(): ThinkContext;
     readonly module: string
     readonly controller: string
     readonly action: string
     param(name?: any, value?: any, m?: string): any
   }
-
-  interface ThinkController extends BaseContext {
+  interface ThinkController extends ThinkBaseContext {
     new(ctx: ThinkContext): ThinkController
 
     ctx: ThinkContext;
@@ -60,7 +65,6 @@ declare module 'thinkjs' {
     controller(name: string, m?: string): any
     action(controller: string|Object, name: string, m?: string): any
   }
-
   interface ThinkLogic extends ThinkController {
     new(ctx: ThinkContext): ThinkLogic
     allowMethods: string
@@ -68,12 +72,10 @@ declare module 'thinkjs' {
     validateErrors?: Object
     validate(rules: Object, msgs?: Object): Object
   }
-
   interface ThinkService {
     new(): ThinkService
   }
-
-  interface ThinkApp extends Koa {
+  interface ThinkApplication extends Koa {
     modules: string[]
     controllers: any[]
     logics: any[]
@@ -83,18 +85,8 @@ declare module 'thinkjs' {
     validators: any
     server: any
   }
-
-  interface ThinkLogger {
-    debug(message: any): void
-    info(message: any): void
-    warn(message: any): void
-    error(message: any): void
-    trace(message: any): void
-  }
-
   interface Think {
-    lushijie: string
-    app: ThinkApp
+    app: ThinkApplication
     ROOT_PATH: string
     APP_PATH: string
     env: string
@@ -109,15 +101,13 @@ declare module 'thinkjs' {
     Logic: ThinkLogic
     Service: ThinkService
   }
-
-  class Application {
-    constructor(options: Object);
-    run(): void;
-  }
-
-  const think: Think
-
-  // export = Application;
+  const think: Think;
 }
 
+declare class Application {
+  constructor(arg: Object)
+  run(): void
+}
+
+export = Application;
 
