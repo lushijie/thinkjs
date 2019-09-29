@@ -38,7 +38,7 @@
     }
   ],
   "main": "lib/application.js",
-  "types": "./typings/index.d.ts",
+  "types": "index.d.ts",
   "dependencies": {
     "cookies": "^0.7.0",
     "debug": "^3.1.0",
